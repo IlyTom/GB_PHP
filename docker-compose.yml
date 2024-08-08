@@ -1,0 +1,25 @@
+version: '3.8'  
+
+services:  
+  app:  
+    build:  
+      context: .  
+      dockerfile: Dockerfile  
+    volumes:  
+      - ./app:/var/www/html  # Связываем локальную папку с папкой внутри контейнера  
+    networks:  
+      - my-network  
+
+  nginx:  
+    image: nginx:alpine  
+    volumes:  
+      - ./app:/var/www/html  # Связываем локальную папку с папкой внутри контейнера  
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf  # Подключаем конфигурацию Nginx  
+    ports:  
+      - "8080:80"  # Порт на хосте, перенаправленный на порт контейнера  
+    networks:  
+      - my-network  
+
+networks:  
+  my-network:  
+    driver: bridge
